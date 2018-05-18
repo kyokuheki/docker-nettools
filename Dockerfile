@@ -40,4 +40,4 @@ RUN set -x \
 
 RUN apt-get update
 
-ENTRYPOINT ["bash"]
+#ENTRYPOINT ["bash"]
