@@ -25,6 +25,8 @@ RUN set -x \
     hping3 \
     httping \
     lft \
+    arp-scan \
+    ieee-data \
     mtr-tiny \
     traceroute \
     iputils-tracepath \
@@ -38,6 +40,11 @@ RUN set -x \
     proxytunnel \
  && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
+RUN set -x \
+ && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u http://standards-oui.ieee.org/oui.txt \
+ && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u http://standards-oui.ieee.org/iab/iab.txt
+
 RUN apt-get update
 
 #ENTRYPOINT ["bash"]
+CMD ["/bin/bash"]
