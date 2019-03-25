@@ -15,6 +15,8 @@ RUN set -x \
     lsh-client \
     tcpdump \
     nmap \
+    curl \
+    wget \
     netcat-openbsd \
     telnet \
     socat \
