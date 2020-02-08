@@ -1,4 +1,4 @@
-FROM ubuntu:rolling
+FROM ubuntu:devel
 LABEL maintainer Kyokuheki <kyokuheki@gmail.com>
 
 ENV LANG=C.UTF-8 \
@@ -28,7 +28,6 @@ RUN set -x \
     httping \
     lft \
     arp-scan \
-    ieee-data \
     mtr-tiny \
     traceroute \
     iputils-tracepath \
@@ -44,9 +43,10 @@ RUN set -x \
 
 RUN set -x \
  && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u http://standards-oui.ieee.org/oui.txt \
- && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u http://standards-oui.ieee.org/iab/iab.txt
+ && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u http://standards-oui.ieee.org/iab/iab.txt \
+ && echo '00AE	SoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
 
 RUN apt-get update
 
-#ENTRYPOINT ["bash"]
+#ENTRYPOINT ["/bin/bash"]
 CMD ["/bin/bash"]
