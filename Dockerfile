@@ -11,7 +11,7 @@ RUN set -x \
  && wget https://standards-oui.ieee.org/iab/iab.txt \
  && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt \
  && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u file:///iab.txt \
- && echo '00AE	SoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
+ && echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
 
 FROM alpine:edge
 LABEL maintainer Kenzo Okuda <kyokuheki@gmail.com>
