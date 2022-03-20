@@ -8,12 +8,11 @@ RUN set -x \
     perl-libwww \
     wget
     
-RUN set -x \
- && wget https://standards-oui.ieee.org/oui.txt \
- && wget https://standards-oui.ieee.org/iab/iab.txt \
- && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt \
- && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u file:///iab.txt \
- && echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
+RUN wget https://standards-oui.ieee.org/oui.txt
+RUN wget https://standards-oui.ieee.org/iab/iab.txt
+RUN get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt
+RUN get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u file:///iab.txt
+RUN echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
 
 FROM alpine:edge
 LABEL maintainer Kenzo Okuda <kyokuheki@gmail.com>
