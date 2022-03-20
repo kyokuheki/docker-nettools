@@ -6,7 +6,9 @@ RUN set -x \
     arp-scan \
     perl \
     perl-libwww \
-    wget \
+    wget
+    
+RUN set -x \
  && wget https://standards-oui.ieee.org/oui.txt \
  && wget https://standards-oui.ieee.org/iab/iab.txt \
  && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt \
