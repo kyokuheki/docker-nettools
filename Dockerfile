@@ -51,7 +51,8 @@ RUN set -x \
     drill \
     ldns-tools \
     corkscrew@testing \
-    tar
+    tar \
+    pciutils
 # httping proxytunnel lft lsh-client mosh
 
 COPY --from=builder /usr/share/arp-scan/ieee-oui.txt /usr/share/arp-scan/ieee-oui.txt
