@@ -1,5 +1,5 @@
 FROM ubuntu:devel
-LABEL maintainer=Kyokuheki <kyokuheki@gmail.com>
+LABEL org.opencontainers.image.authors="Kenzo Okuda <kyokuheki@gmail.com>"
 
 ENV LANG=C.UTF-8 \
     LC_ALL=C.UTF-8

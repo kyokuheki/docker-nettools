@@ -1,5 +1,5 @@
-FROM alpine as builder
-LABEL maintainer=Kenzo Okuda <kyokuheki@gmail.com>
+FROM alpine AS builder
+LABEL org.opencontainers.image.authors="Kenzo Okuda <kyokuheki@gmail.com>"
 
 RUN set -x \
  && apk add --no-cache \
