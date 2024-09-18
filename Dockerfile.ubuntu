@@ -41,15 +41,16 @@ RUN set -x \
     pciutils \
  && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
+#&& update-ieee-data
 RUN set -x \
- && wget https://standards-oui.ieee.org/oui.txt \
- && wget https://standards-oui.ieee.org/iab/iab.txt \
- && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt \
- && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u file:///iab.txt \
- && echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt \
- && rm -fv oui.txt iab.txt
+ && curl -vsSL https://standards-oui.ieee.org/oui/oui.csv -o /var/lib/ieee-data/oui.csv \
+ && curl -vsSL https://standards-oui.ieee.org/oui28/mam.csv -o /var/lib/ieee-data/mam.csv \
+ && curl -vsSL https://standards-oui.ieee.org/oui36/oui36.csv -o /var/lib/ieee-data/oui36.csv \
+ && curl -vsSL https://standards-oui.ieee.org/iab/iab.csv -o /var/lib/ieee-data/iab.csv \
+ && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt \
+ && echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
 
-RUN apt-get update
+ RUN apt-get update
 
 #ENTRYPOINT ["/bin/bash"]
 CMD ["/bin/bash"]

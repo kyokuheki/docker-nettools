@@ -1,26 +1,33 @@
-FROM alpine:edge as builder
+FROM alpine as builder
 LABEL maintainer Kenzo Okuda <kyokuheki@gmail.com>
 
 RUN set -x \
- && apk add --no-cache -X https://dl-cdn.alpinelinux.org/alpine/edge/testing\
-    arp-scan \
-    perl \
-    perl-libwww \
-    wget
-    
-RUN set -x \
- && wget https://standards-oui.ieee.org/oui.txt \
- && wget https://standards-oui.ieee.org/iab/iab.txt \
- && get-oui -v -f /usr/share/arp-scan/ieee-oui.txt -u file:///oui.txt \
- && get-iab -v -f /usr/share/arp-scan/ieee-iab.txt -u file:///iab.txt \
- && echo -e '00AE\tSoftEther (Virtual Hub)' >> /usr/share/arp-scan/mac-vendor.txt
-
-FROM alpine:edge
-LABEL maintainer Kenzo Okuda <kyokuheki@gmail.com>
-
-RUN set -x \
- && sed -i -e '$ a @testing https://dl-cdn.alpinelinux.org/alpine/edge/testing' /etc/apk/repositories \
  && apk add --no-cache \
+    perl \
+    perl-lwp-protocol-https \
+    perl-text-csv \
+    curl
+
+RUN set -x \
+ && mkdir -vp /ieee-data/oui /ieee-data/oui28 /ieee-data/oui36 /ieee-data/iab \
+ && curl -vsSL https://raw.githubusercontent.com/royhills/arp-scan/1.10.0/get-oui -o /get-oui \
+ && curl -vsSL https://standards-oui.ieee.org/oui/oui.csv -o /ieee-data/oui/oui.csv \
+ && curl -vsSL https://standards-oui.ieee.org/oui28/mam.csv -o /ieee-data/oui28/mam.csv \
+ && curl -vsSL https://standards-oui.ieee.org/oui36/oui36.csv -o /ieee-data/oui36/oui36.csv \
+ && curl -vsSL https://standards-oui.ieee.org/iab/iab.csv -o /ieee-data/iab/iab.csv
+
+RUN set -x \
+ && sed -i -r 's@https://standards-oui.ieee.org/@file:///ieee-data/@g' /get-oui \
+ && chmod -v +x /get-oui \
+ && /get-oui -v -f /ieee-data/ieee-oui.txt \
+ && echo -e '00AE\tSoftEther (Virtual Hub)' >> /ieee-data/mac-vendor.txt
+
+FROM alpine
+LABEL maintainer Kenzo Okuda <kyokuheki@gmail.com>
+
+RUN set -x \
+&& sed -i -e '$ a @testing https://dl-cdn.alpinelinux.org/alpine/edge/testing' /etc/apk/repositories \
+&& apk add --no-cache \
     bash \
     coreutils \
     util-linux \
@@ -41,7 +48,7 @@ RUN set -x \
     fping \
     dhcping \
     hping3@testing \
-    arp-scan@testing \
+    arp-scan \
     mtr \
     tcptraceroute \
     iperf \
@@ -50,14 +57,13 @@ RUN set -x \
     bind-tools \
     drill \
     ldns-tools \
-    corkscrew@testing \
+    corkscrew \
     tar \
     pciutils
 # httping proxytunnel lft lsh-client mosh
 
-COPY --from=builder /usr/share/arp-scan/ieee-oui.txt /usr/share/arp-scan/ieee-oui.txt
-COPY --from=builder /usr/share/arp-scan/ieee-iab.txt /usr/share/arp-scan/ieee-iab.txt
-COPY --from=builder /usr/share/arp-scan/mac-vendor.txt /usr/share/arp-scan/mac-vendor.txt
+COPY --from=builder /ieee-data/ieee-oui.txt /usr/share/arp-scan/ieee-oui.txt
+COPY --from=builder /ieee-data/mac-vendor.txt /usr/share/arp-scan/mac-vendor.txt
 
 #ENTRYPOINT ["/bin/bash", "-li"]
 CMD ["/bin/bash", "-li"]
