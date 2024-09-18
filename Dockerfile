@@ -23,7 +23,7 @@ RUN set -x \
  && echo -e '00AE\tSoftEther (Virtual Hub)' >> /ieee-data/mac-vendor.txt
 
 FROM alpine
-LABEL maintainer=Kenzo Okuda <kyokuheki@gmail.com>
+LABEL org.opencontainers.image.authors="Kenzo Okuda <kyokuheki@gmail.com>"
 
 RUN set -x \
 && sed -i -e '$ a @testing https://dl-cdn.alpinelinux.org/alpine/edge/testing' /etc/apk/repositories \
