@@ -2,8 +2,7 @@ FROM ubuntu:devel
 LABEL maintainer Kyokuheki <kyokuheki@gmail.com>
 
 ENV LANG=C.UTF-8 \
-    LC_ALL=C.UTF-8 \
-    DEBIAN_FRONTEND=noninteractive
+    LC_ALL=C.UTF-8
 
 RUN set -x \
  && apt-get update && apt-get install -y \
@@ -39,6 +38,7 @@ RUN set -x \
     dnsutils \
     ldnsutils \
     proxytunnel \
+    pciutils \
  && apt-get clean && rm -rf /var/cache/apt/archives/* /var/lib/apt/lists/*
 
 RUN set -x \
