@@ -39,6 +39,7 @@ RUN set -x \
     putty \
     tcpdump \
     nmap \
+    nmap-nping \
     curl \
     wget \
     netcat-openbsd \
